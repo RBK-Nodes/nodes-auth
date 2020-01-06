@@ -9,7 +9,7 @@ app.post('/get', (req, res)=>{
     User.find(req.body.username)
     .then((data)=>{
         console.log(data)
-        if(data.length>0)   res.status(200).send("found user")
+        if(data.rows && data.rows.length>0)   res.status(200).send("found user")
         else    throw Error("aaa")
     })
     .catch(()=>{
