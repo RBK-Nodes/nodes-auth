@@ -19,7 +19,7 @@ function findUser(user) {
         if(data.rows && data.rows.length>0)
             return data.rows[0]
         else
-            throw "no user found" 
+            return  error("no user found") 
     })
     .catch(err=>{
         throw "unexpected error happened"
