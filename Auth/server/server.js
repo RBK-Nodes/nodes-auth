@@ -20,11 +20,11 @@ app.post('/create', (req, res)=>{
     res.status(200).send("create route");
 
     User.create(req.body)
-    .then(data=>{
-        console.log(data)
+    .then(()=>{
+        console.log("created user")
     })
-    .catch(err=>{
-        console.log(err)
+    .catch(()=>{
+        console.log("duplicate")
     })
 })
 
