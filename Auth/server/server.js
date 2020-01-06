@@ -7,8 +7,10 @@ app.use(express.json());
 
 app.post('/get', (req, res)=>{
     User.find(req.body.username)
-    .then(()=>{
-        res.status(200).send("found user")
+    .then((data)=>{
+        console.log(data)
+        if(data.length>0)   res.status(200).send("found user")
+        else    throw Error("aaa")
     })
     .catch(()=>{
         res.status(404).send("user not found")
