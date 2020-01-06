@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node Auth/db/db.js"
+    "start": "node Auth/db/db.js",
+    "heroku": "git add . & git commit -m \"automated message\" & git push heroku master"
   },
   "repository": {
     "type": "git",
