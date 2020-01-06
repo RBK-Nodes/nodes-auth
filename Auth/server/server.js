@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 var app = express();
-const { passwordHasher } = require('../encryption/passwordHasher')
+const { passwordHasher, passwordCompare } = require('../encryption/crypto')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -38,11 +38,20 @@ app.post('/login', (req, res) => {
     //check if user exists in DB?
     //get his hashedPass
     //compare it with the hashing function
-    // matched?
-    // generate new Token
-    // store it in DB
-    //send the token back to the user
-    //redirect to main page
-    //else ?
-    //send message telling PW not correct
+    passwordCompare(password
+        // ,hashed password here
+        , (err, match) => {
+            // matched?
+            if (match) {
+                // generate new Token
+                // store it in DB
+                //send the token back to the user
+                //redirect to main page
+            } else {
+                //else ?
+                //send message telling PW not correct
+
+            }
+        }
+    )
 })
