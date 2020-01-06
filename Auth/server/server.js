@@ -7,11 +7,11 @@ app.use(express.json());
 
 app.post('/get', (req, res)=>{
     User.find(req.body.username)
-    .then(data=>{
-        res.status(200).send("found user", data)
+    .then(()=>{
+        res.status(200).send("found user")
     })
-    .catch(err=>{
-        res.status(404).send("user not found ", err)
+    .catch(()=>{
+        res.status(404).send("user not found")
     })
 })
 
