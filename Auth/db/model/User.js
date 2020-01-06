@@ -14,3 +14,13 @@ conn.query(userSchema, (err, data)=>{
 
 //User functionality
 
+function getUser(username) {
+    return conn.query(`SELECT * FROM users WHERE username = $1`, username)
+}
+
+function createUser({username, password}) {
+    return conn.query(`INSERT into users(username, password) VALUES($1, $2)`, [username, password])
+}
+
+module.exports.find = getUser;
+module.exports.create = createUser;
