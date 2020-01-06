@@ -15,7 +15,7 @@ conn.query(userSchema, (err, data)=>{
 //User functionality
 
 function getUser(username) {
-    return conn.query(`SELECT * FROM users WHERE username = $1`, username)
+    return conn.query(`SELECT * FROM users WHERE username = $1`, [username])
 }
 
 function createUser({username, password}) {
