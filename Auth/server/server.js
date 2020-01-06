@@ -8,10 +8,11 @@ var port = process.env.PORT || 3001
 app.use(express.json());
 
 app.post('/get', (req, res)=>{
-    if(!req.body.username) {
+    var user = req.body.username;
+    if(!user) {
         res.status(402).send("invalid request")
     } else {
-        User.find(req.body.username)
+        User.find(user)
         .then(response=>{
             res.status(200).send(response)
         })
@@ -20,7 +21,16 @@ app.post('/get', (req, res)=>{
 
 
 app.post('/create', (req, res)=>{
-    
+    var user = req.body.username;
+    var pass = req.body.password;
+    if(!user || !pass ) {
+        res.status(402).send("invalid request")
+    } else {
+        User.create(user, pass)
+        .then(response=>{
+            res.status(200).send(response)
+        })
+    }
 
     
 })
