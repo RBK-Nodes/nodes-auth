@@ -6,6 +6,7 @@ var port = process.env.PORT || 3001
 app.use(express.json());
 
 app.post('/get', (req, res)=>{
+    res.status(200);
     User.find(req.body.username)
     .then(data=>{
         res.status(200).send("got data", data)
@@ -16,6 +17,8 @@ app.post('/get', (req, res)=>{
 })
 
 app.post('/create', (req, res)=>{
+    res.status(200);
+
     User.create(req.body)
     .then(data=>{
         res.status(200).send("got data", data)
