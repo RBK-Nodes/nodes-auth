@@ -8,20 +8,20 @@ app.use(express.json());
 app.post('/get', (req, res)=>{
     User.find(req.body.username)
     .then(data=>{
-        res.send("got data", data)
+        res.status(200).send("got data", data)
     })
     .catch(err=>{
-        res.send("got error ", err)
+        res.status(200).send("got error ", err)
     })
 })
 
 app.post('/create', (req, res)=>{
     User.create(req.body)
     .then(data=>{
-        res.send("got data", data)
+        res.status(200).send("got data", data)
     })
     .catch(err=>{
-        res.send("got error ", err)
+        res.status(200).send("got error ", err)
     })
 })
 
