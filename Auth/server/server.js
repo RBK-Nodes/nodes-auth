@@ -16,6 +16,9 @@ app.post('/get', (req, res)=>{
         .then(response=>{
             res.status(200).send(response)
         })
+        .catch(err=>{
+            res.status(401).send(err)
+        })
     }
 })
 
@@ -30,9 +33,10 @@ app.post('/create', (req, res)=>{
         .then(response=>{
             res.status(200).send(response)
         })
+        .catch(err=>{
+            res.status(401).send(err)
+        })
     }
-
-    
 })
 
 app.listen(port);

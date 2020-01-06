@@ -8,7 +8,7 @@ function createUser(userObj) {
     return "user created successfully"
     })
    .catch(err=>{
-       return "error creating user";
+       throw "user exists";
    })
    
 }
@@ -19,10 +19,10 @@ function findUser(user) {
         if(data.rows && data.rows.length>0)
             return data.rows[0]
         else
-            return "no user found" 
+            throw "no user found" 
     })
     .catch(err=>{
-        return "unexpected error happened"
+        throw "unexpected error happened"
     })
     
     
