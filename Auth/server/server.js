@@ -10,22 +10,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var port = process.env.PORT || 3001
 app.use(express.json());
 
-app.post('/get', (req, res) => {
-    User.find(req.body.username)
+//abstract signUp
+var userFinder = (req, res, callback) => {
+    const { username } = req.body
+    User.find(username)
         .then((data) => {
             console.log(data)
-            if (data.rows && data.rows.length > 0) res.status(200).send("found user")
-            else throw Error("aaa")
+            if (data.rows && data.rows.length > 0) {
+                callback(null, data)
+            }
+            else callback(Error("aaa"), null)
         })
         .catch(() => {
             res.status(404).send("user not found")
         })
+}
+app.post('/get', (req, res) => {
+    //need to work more on this condition
+    userFinder(req, res, (err, result) => {
+        if (err) res.sendStatus(300)
+        res.sendStatus(200).json(result)
+    })
 })
 
 
 app.post('/create', (req, res) => {
-
-
     User.create(req.body)
         .then(() => {
             console.log("created user")
@@ -46,19 +55,39 @@ var server = app.listen(port, () => {
 app.post('/signup', (req, res) => {
     //1   take username
     //2   password
+
+    // check if the user aleady signed up
     let { username, password } = req.body
+    userFinder(req, res, (err, result) => {
+        if (err) res.sendStatus(300)
+        if (result) {
+            //redirect to login
+            res.redirect('/login')
+        }
+    })
+
+
     //3   hash the password 
     passwordHasher(password, (err, hash) => {
         if (err) return;
-        const hashedPass = hash
-    });
+        var hashedPass = hash
+    })
     //4   store user and  password in the DB
-    // stord successfly? 
-    // redirect to login
-    res.redirect('/login')
-    // else ? 
-    //send 403 resonse
-    res.sendStatus(403)
+    User.create({ username: username, password: hashedPass })
+        .then(result => {
+            if (result) {
+                // stord successfly? 
+                // redirect to login
+                res.redirect('/login')
+            }
+        })
+        .catch(err => {
+            // else ? 
+            //send 403 resonse
+            if (err) {
+                res.sendStatus(403)
+            }
+        })
 })
 
 app.post('/login', (req, res) => {
@@ -67,22 +96,27 @@ app.post('/login', (req, res) => {
     // mot ?
     let { username, password } = req.body
     //check if user exists in DB?
-    //get his hashedPass
-    //compare it with the hashing function
-    passwordCompare(password
-        // ,hashed password here
-        , (err, match) => {
-            // matched?
-            if (match) {
-                // generate new Token
-                // store it in DB
-                //send the token back to the user
-                //redirect to main page 
-            } else {
-                //else ?
-                //send message telling PW not correct
-
-            }
+    userFinder(req, res, (err, result) => {
+        if (err) res.sendStatus(401)
+        if (result) {
+            //get his hashedPass
+            var hash = result.password
         }
+    })
+    //compare it with the hashing function
+    passwordCompare(password, hash, (err, match) => {
+        // matched?
+        if (match) {
+            // generate new Token
+            // store it in DB
+            //send the token back to the user
+            //redirect to main page 
+        } else {
+            //else ?
+            //send message telling PW not correct
+
+        }
+    }
     )
 })
+

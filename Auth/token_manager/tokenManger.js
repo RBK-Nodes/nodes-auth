@@ -19,4 +19,4 @@ console.log(process.env.ACCESS_TOKEN_SECRET)
 const generateAccessToken = (user) => {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { epiresIn: '15s' })
 }
-generateAccessToken({ name: 'Adam' })
+// generateAccessToken({ name: 'Adam' })
