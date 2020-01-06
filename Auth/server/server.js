@@ -19,13 +19,13 @@ app.post('/get', (req, res)=>{
 app.post('/create', (req, res)=>{
     res.status(200).send("create route");
 
-    // User.create(req.body)
-    // .then(data=>{
-    //     res.status(200).send("got data", data)
-    // })
-    // .catch(err=>{
-    //     res.status(200).send("got error ", err)
-    // })
+    User.create(req.body)
+    .then(data=>{
+        console.log(data)
+    })
+    .catch(err=>{
+        console.log(err)
+    })
 })
 
 app.listen(port);
