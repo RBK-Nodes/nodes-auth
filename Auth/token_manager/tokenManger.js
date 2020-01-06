@@ -9,7 +9,7 @@ const tokenVerifier = (req, res, next) => {
     if (!token) {
         return res.sendStatus(401)
     }
-    jwt.verify(token, process.env.TACCESS_TOKEN_SECRET, (err, user, next) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user, next) => {
         if (err) { return res.sendStatus(403) }
         req.user = user;
         next()

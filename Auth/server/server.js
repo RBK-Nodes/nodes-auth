@@ -9,6 +9,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //changed the port to avoid conflicts
 var port = process.env.PORT || 3001
 app.use(express.json());
+var server = app.listen(port, () => {
+    console.log('server is running on port', server.address().port);
+})
 
 //abstract signUp
 var userFinder = (req, res, callback) => {
@@ -17,7 +20,7 @@ var userFinder = (req, res, callback) => {
         .then((data) => {
             console.log(data)
             if (data.rows && data.rows.length > 0) {
-                callback(null, data)
+                callback(null, data.rows)
             }
             else callback(Error("aaa"), null)
         })
@@ -47,9 +50,6 @@ app.post('/create', (req, res) => {
         })
 })
 
-var server = app.listen(port, () => {
-    console.log('server is running on port', server.address().port);
-})
 
 //adding routes here (post requsets)
 app.post('/signup', (req, res) => {
@@ -65,7 +65,6 @@ app.post('/signup', (req, res) => {
             res.redirect('/login')
         }
     })
-
 
     //3   hash the password 
     passwordHasher(password, (err, hash) => {
@@ -91,7 +90,6 @@ app.post('/signup', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-
     //check if the user has a valid token
     // mot ?
     let { username, password } = req.body
