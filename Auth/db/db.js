@@ -4,7 +4,7 @@ const pool = new Pool({
     connectionString: process.env.DATABASE_URL
 });
 
-pool.query("CREATE DATABASE nodechat", (data)=>{
+pool.query("CREATE table users", (data)=>{
     console.log(data)
 })
 
