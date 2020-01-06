@@ -17,14 +17,17 @@ app.post('/get', (req, res)=>{
 })
 
 app.post('/create', (req, res)=>{
-    res.status(200).send("create route");
+    
 
     User.create(req.body)
     .then(()=>{
         console.log("created user")
+        res.status(200).send("created user");
     })
     .catch(()=>{
         console.log("duplicate")
+        res.status(403).send("duplicate user");
+
     })
 })
 
