@@ -19,10 +19,10 @@ function findUser(user) {
         if(data.rows && data.rows.length>0)
             return data.rows[0]
         else
-            return  error("no user found") 
+            return  error("unexpected error happened") 
     })
     .catch(err=>{
-        throw "unexpected error happened"
+        throw "used not Found"
     })
     
     
