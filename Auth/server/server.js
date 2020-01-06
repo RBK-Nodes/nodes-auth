@@ -34,6 +34,7 @@ app.post('/signup', (req, res) => {
 app.post('/login', (req, res) => {
 
     //check if the user has a valid token
+    // mot ?
     let { username, password } = req.body
     //check if user exists in DB?
     //get his hashedPass
@@ -46,7 +47,7 @@ app.post('/login', (req, res) => {
                 // generate new Token
                 // store it in DB
                 //send the token back to the user
-                //redirect to main page
+                //redirect to main page 
             } else {
                 //else ?
                 //send message telling PW not correct
