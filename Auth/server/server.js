@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const User = require('../db/model/User.js')
+require('dotenv').config();
 var app = express();
 const { passwordHasher, passwordCompare } = require('../encryption/crypto')
 app.use(bodyParser.json());
@@ -12,6 +13,7 @@ app.use(express.json());
 var server = app.listen(port, () => {
     console.log('server is running on port', server.address().port);
 })
+
 
 //abstract signUp
 var userFinder = (req, res, callback) => {

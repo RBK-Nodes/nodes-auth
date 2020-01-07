@@ -1,7 +1,8 @@
-const jwt = require('jsonwebtoken')
-const dotenv = require('dotenv').config();
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 
+console.log(process.env.ACCESS_TOKEN_SECRET)
 
 const tokenVerifier = (req, res, next) => {
     const authHeader = req.headers["authorization"]
@@ -15,7 +16,6 @@ const tokenVerifier = (req, res, next) => {
         next()
     })
 }
-console.log(process.env.ACCESS_TOKEN_SECRET)
 const generateAccessToken = (user) => {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { epiresIn: '15s' })
 }

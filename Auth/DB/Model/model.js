@@ -1,6 +1,6 @@
 const { Client, Pool } = require('pg')
 require('dotenv').config();
-console.log(dotenv)
+console.log(process.env)
 // change the credentials to server's
 const connectionString = process.env.DATABASE_URL
 
