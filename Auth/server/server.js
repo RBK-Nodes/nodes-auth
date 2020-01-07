@@ -1,7 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const User = require('../db/model/User.js')
-require('dotenv').config();
+const User = require('./controller/User.js/index.js')
 var app = express();
 const { passwordHasher, passwordCompare } = require('../encryption/crypto')
 app.use(bodyParser.json());

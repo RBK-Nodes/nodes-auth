@@ -16,6 +16,9 @@ const tokenVerifier = (req, res, next) => {
         next()
     })
 }
+
+//genrate refresh Token HERE!!!
+
 const generateAccessToken = (user) => {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { epiresIn: '15s' })
 }
