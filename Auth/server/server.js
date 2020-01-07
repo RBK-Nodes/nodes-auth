@@ -1,36 +1,42 @@
 const express = require('express')
 const app = express();
-const User = require('../db/model/User.js')
+
+const User = require('./controller/User');
+
 //changed the port to avoid conflicts
 var port = process.env.PORT || 3001
 app.use(express.json());
 
 app.post('/get', (req, res)=>{
-    User.find(req.body.username)
-    .then((data)=>{
-        console.log(data)
-        if(data.rows && data.rows.length>0)   res.status(200).send("found user")
-        else    throw Error("aaa")
-    })
-    .catch(()=>{
-        res.status(404).send("user not found")
-    })
+    var user = req.body.username;
+    if(!user) {
+        res.status(402).send("invalid request")
+    } else {
+        User.find(user)
+        .then(response=>{
+            res.status(200).send(response)
+        })
+        .catch(err=>{
+            res.status(401).send(err)
+        })
+    }
 })
 
 
 app.post('/create', (req, res)=>{
-    
-
-    User.create(req.body)
-    .then(()=>{
-        console.log("created user")
-        res.status(200).send("created user");
-    })
-    .catch(()=>{
-        console.log("duplicate")
-        res.status(403).send("duplicate user");
-
-    })
+    var user = req.body.username;
+    var pass = req.body.password;
+    if(!user || !pass ) {
+        res.status(402).send("invalid request")
+    } else {
+        User.create(user, pass)
+        .then(response=>{
+            res.status(200).send(response)
+        })
+        .catch(err=>{
+            res.status(401).send(err)
+        })
+    }
 })
 
 app.listen(port);
