@@ -1,37 +1,61 @@
-const User = require('../../db/model/User.js')
-
-function createUser(userObj) {
-    return User.create(userObj.username, userObj.password)
-        .then(data => {
-            return "user created successfully"
-        })
-        .catch(err => {
-            throw "user exists";
-        })
-
-}
+const User = require('../../db/model/User.js');
+const bcrypt = require('bcryptjs');
+const salt = 10;
 
 function findUser(user) {
     return User.find(user)
-        .then(data => {
-            if (data.rows && data.rows.length > 0)
-                return data.rows[0]
-            else
-                return error("unexpected error happened")
-        })
-        .catch(err => {
-            throw "used not Found"
-        })
-
+    .then(result=>{
+        if(result.rows.length) {
+            return result.rows[0]
+        } else {
+            throw Error("user not found")
+        }
+    })
 }
 
-function updateUser(user, userObj) {
-
+function comparePassword(pass, hash) {
+    return bcrypt.compare(pass, hash)
 }
 
-function deleteUser(user) {
-
+function saveToDB(user, pass) {
+    return bcrypt.hash(pass, salt)
+    .then(hash=>{
+        return User.create(user, hash)
+    })
 }
 
-module.exports.create = createUser;
-module.exports.find = findUser;
+
+
+
+
+
+function signUp(user, pass) {
+   return findUser(user)
+    .then(()=> {
+        throw "username already exists"
+    })
+    .catch((err)=> {
+        if(err==="username already exists")
+            throw err;
+        else
+            return saveToDB(user, pass);
+    })
+}
+
+function signIn(user, pass) {
+    return findUser(user)
+    .then(userObj=>{
+        return comparePassword(pass, userObj.password)
+    })
+    .then(result=>{
+        if(result){
+            return true
+        } else {
+            return false
+        }
+        
+    })
+}
+
+module.exports.signIn = signIn;
+module.exports.signUp = signUp;
