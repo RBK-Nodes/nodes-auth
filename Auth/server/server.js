@@ -107,11 +107,15 @@ app.post('/login', (req, res) => {
         if (match) {
             // generate new Token
             const token = Token.generateAccessToken({ username })
+
             // store it in DB
+
             //send the token back to the user
             res.authorization = `bearer ${token}`
+
             //redirect to main page 
             res.redirect('/main')
+
         } else {
             //else ?
             //send message telling PW not correct
