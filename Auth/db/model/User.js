@@ -7,9 +7,9 @@ const userSchema = `CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255)
     );`
 
-conn.query(userSchema, (err, data)=>{
-    if(err) console.error(err);
-    else    console.log("Created User Table")
+conn.query(userSchema, (err, data) => {
+    if (err) console.error(err);
+    else console.log("Created User Table")
 })
 
 //User functionality
@@ -17,6 +17,7 @@ conn.query(userSchema, (err, data)=>{
 function getUser(username) {
     return conn.query(`SELECT * FROM users WHERE username = $1`, [username])
 }
+
 
 function createUser(username, password) {
     return conn.query(`INSERT into users(username, password) VALUES($1, $2)`, [username, password])
