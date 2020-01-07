@@ -18,7 +18,8 @@ function getUser(username) {
     return conn.query(`SELECT * FROM users WHERE username = $1`, [username])
 }
 
-function createUser({ username, password }) {
+
+function createUser(username, password) {
     return conn.query(`INSERT into users(username, password) VALUES($1, $2)`, [username, password])
 }
 
