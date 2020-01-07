@@ -1,7 +1,5 @@
 const User = require('../../db/model/User.js')
 
-
-
 function createUser(userObj) {
    return User.create(userObj.username, userObj.password)
    .then(data=>{
