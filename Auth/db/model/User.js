@@ -25,4 +25,3 @@ function createUser(username, password) {
 
 module.exports.find = getUser;
 module.exports.create = createUser;
-{ f }

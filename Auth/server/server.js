@@ -1,7 +1,6 @@
 const express = require('express')
-
+const Token = require('../token_manager/tokenManger')
 const bodyParser = require('body-parser')
-const User = require('./controller/User.js/index.js')
 var app = express();
 const { passwordHasher, passwordCompare } = require('../encryption/crypto')
 app.use(bodyParser.json());
@@ -17,7 +16,7 @@ var server = app.listen(port, () => {
 })
 
 
-//abstract signUp
+//abstract 
 var userFinder = (req, res, callback) => {
     const { username } = req.body
     User.find(username)
@@ -32,6 +31,7 @@ var userFinder = (req, res, callback) => {
             res.status(404).send("user not found")
         })
 }
+
 app.post('/get', (req, res) => {
     //need to work more on this condition
     userFinder(req, res, (err, result) => {
@@ -39,7 +39,6 @@ app.post('/get', (req, res) => {
         res.sendStatus(200).json(result)
     })
 })
-
 
 app.post('/create', (req, res) => {
     User.create(req.body)
@@ -50,12 +49,9 @@ app.post('/create', (req, res) => {
         .catch(() => {
             console.log("duplicate")
             res.status(403).send("duplicate user");
-
         })
 })
 
-
-//adding routes here (post requsets)
 app.post('/signup', (req, res) => {
     //1   take username
     //2   password
@@ -110,16 +106,22 @@ app.post('/login', (req, res) => {
         // matched?
         if (match) {
             // generate new Token
+            const token = Token.generateAccessToken({ username })
             // store it in DB
             //send the token back to the user
+            res.authorization = `bearer ${token}`
             //redirect to main page 
+            res.redirect('/main')
         } else {
             //else ?
             //send message telling PW not correct
-
+            res.json({
+                message: "incorrect Password"
+            })
         }
     }
     )
 
 })
+// console.log(Token.generateAccessToken())
 

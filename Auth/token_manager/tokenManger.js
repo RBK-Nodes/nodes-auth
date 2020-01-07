@@ -1,10 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-
-console.log(process.env.ACCESS_TOKEN_SECRET)
-
-const tokenVerifier = (req, res, next) => {
+const VerifyToken = (req, res, next) => {
     const authHeader = req.headers["authorization"]
     const token = authHeader && authHeader.split(' ')[1]
     if (!token) {
@@ -16,10 +13,14 @@ const tokenVerifier = (req, res, next) => {
         next()
     })
 }
-
 //genrate refresh Token HERE!!!
 
 const generateAccessToken = (user) => {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { epiresIn: '15s' })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET,
+        // { epiresIn: '15s' }
+    )
 }
-// generateAccessToken({ name: 'Adam' })
+module.exports = {
+    generateAccessToken,
+    VerifyToken
+}
