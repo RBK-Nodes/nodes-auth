@@ -7,8 +7,7 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const User = require('./controller/User');
-
+const { signUpHandler, logInHandler, refreshHandler, logoutHandler, authHandler } = require('./requestHandler');
 
 //changed the port to avoid conflicts
 var port = process.env.PORT || 3001
@@ -18,29 +17,12 @@ var server = app.listen(port, () => {
 })
 
 
-app.post('/signup', (req, res)=>{
-    let {username, password} = req.body;
-    User.signUp(username, password)
-    .then((aaa)=>{
-        res.status(201).send({aaa})
-    })
-    .catch((err)=>{
-        res.status(401).send(err)
-    })
-})
+app.post('/signup', signUpHandler);
 
-app.post('/signin', (req, res)=>{
-    let {username, password} = req.body;
-    User.signIn(username, password)
-    .then(loginStatus=>{
-        if(loginStatus){
-            res.status(200).send("logged in");
-        } else {
-            res.status(401).send("password does not match")
-        }
-    })
-    .catch(err=> {
-        res.status(400).send("User not Found")
-    })
+app.post('/signin', logInHandler);
 
-})
+app.post('/refresh', refreshHandler);
+
+app.post('/logout', logoutHandler);
+
+app.post('/auth', authHandler);

@@ -1,26 +1,58 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
 
-const VerifyToken = (req, res, next) => {
-    const authHeader = req.headers["authorization"]
-    const token = authHeader && authHeader.split(' ')[1]
-    if (!token) {
-        return res.sendStatus(401)
+class Refresh {
+
+    static add(token, user) {
+        Refresh._tokens[token] = user;
     }
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user, next) => {
-        if (err) { return res.sendStatus(403) }
-        req.user = user;
-        next()
-    })
+
+    static delete(token) {
+        delete Refresh._tokens[token]
+    }
+
+    static check(token, user) {
+        return Refresh._tokens[token] === user;
+    }
 }
-//genrate refresh Token HERE!!!
+Refresh._tokens = {};
 
 const generateAccessToken = (user) => {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET,
-        // { epiresIn: '15s' }
-    )
+    const token = jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
+    const refreshToken = jwt.sign(token, process.env.ACCESS_TOKEN_SECRET);
+    Refresh.add(refreshToken, user);
+    return {token, refreshToken};
 }
+
+const refreshToken = (user, refreshToken) => {
+    try {
+        jwt.verify(refreshToken, process.env.ACCESS_TOKEN_SECRET);
+        if(Refresh.check(refreshToken, user)){
+            const token = jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" })
+            return token;
+        }else 
+            return false;
+
+    } catch(err) {
+        return false;
+    }
+}
+
+const logoutToken= (refreshToken) => {
+    Refresh.delete(refreshToken);
+}
+
+const verifyToken = (token) => {
+    try {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 module.exports = {
     generateAccessToken,
-    VerifyToken
+    refreshToken,
+    logoutToken,
+    verifyToken
 }
