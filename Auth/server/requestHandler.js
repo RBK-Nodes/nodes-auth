@@ -33,7 +33,7 @@ function logInHandler(req, res) {
 
 function refreshHandler(req, res) {
     var token = req.body.refreshToken
-    var result = tokens.refreshToken(token);
+    var result = tokens.refreshToken(req.body.username, token);
     if (result) {
         res.status(200).send({token: result})
     } else {

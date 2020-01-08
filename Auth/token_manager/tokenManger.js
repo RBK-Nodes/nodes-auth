@@ -26,13 +26,16 @@ const generateAccessToken = (user) => {
 const refreshToken = (user, refreshToken) => {
     try {
         jwt.verify(refreshToken, process.env.ACCESS_TOKEN_SECRET);
+        console.log(user, refreshToken)
         if(Refresh.check(refreshToken, user)){
             const token = jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" })
+            console.log('aaaa')
             return token;
         }else 
             return false;
 
     } catch(err) {
+        console.log(err)
         return false;
     }
 }
