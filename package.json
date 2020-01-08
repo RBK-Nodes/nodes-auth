@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Authentication for ChattingApp",
   "scripts": {
-    "start": "nodemon  auth/server/server.js"
+    "start": "nodemon Auth/server/server.js"
   },
   "repository": {
     "type": "git",
