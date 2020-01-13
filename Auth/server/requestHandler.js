@@ -1,6 +1,8 @@
 const User = require('./controller/User');
 const tokens = require('../token_manager/tokenManger');
 
+//Handles the user sign up route, expects a valid username and password, returns a token and a refresh token
+//adds a user to the DB
 function signUpHandler(req, res) {
     let {username, password} = req.body;
     User.signUp(username, password)
@@ -12,7 +14,7 @@ function signUpHandler(req, res) {
         res.status(401).send(err)
     })
 }
-
+//handles login route, same as signUp route
 function logInHandler(req, res) {
     let {username, password} = req.body;
     User.signIn(username, password)
@@ -31,6 +33,7 @@ function logInHandler(req, res) {
 
 }
 
+//Handles the refresh route, expects a valid refresh token, returns a new JWT if valid
 function refreshHandler(req, res) {
     var token = req.body.refreshToken
     var result = tokens.refreshToken(req.body.username, token);
@@ -40,13 +43,14 @@ function refreshHandler(req, res) {
         res.status(400).send("token expired")
     }
 }
-
+//Handles the logout route, expects a refresh token, removes the included token from the refresh token list
 function logoutHandler(req, res) {
     var token = req.body.refreshToken
     tokens.logoutToken(token)
     res.status(200).send("logged out")
 }
 
+//Handles the auth route, used for testing purposes to see if a token is valid or not
 function authHandler(req, res) {
    var token = req.header('authorization').replace('bearer ', '')
    if(tokens.verifyToken(token)){

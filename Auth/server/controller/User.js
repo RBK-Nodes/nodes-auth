@@ -2,6 +2,7 @@ const User = require('../../db/model/User.js');
 const bcrypt = require('bcryptjs');
 const salt = 10;
 
+//Find user from the database, returns a promise with either the result or throws an error
 function findUser(user) {
     return User.find(user)
     .then(result=>{
@@ -13,10 +14,12 @@ function findUser(user) {
     })
 }
 
+//compare password to hash from DB, returns a promise that resolves in either true or false
 function comparePassword(pass, hash) {
     return bcrypt.compare(pass, hash)
 }
 
+//save user and the password hash into the DB, returns a promise
 function saveToDB(user, pass) {
     return bcrypt.hash(pass, salt)
     .then(hash=>{
